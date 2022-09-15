@@ -1,0 +1,6 @@
+Health:114
+Mana: 50
+Strength 15
+Agility 13
+Wisdom 10
+Equipment System.Collections.Generic.LinkedList`1[System.Int32]
