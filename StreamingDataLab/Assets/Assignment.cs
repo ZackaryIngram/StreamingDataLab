@@ -4,6 +4,7 @@ This RPG data streaming assignment was created by Fernando Restituto.
 Pixel RPG characters created by Sean Browning.
 */
 
+using JetBrains.Annotations;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -84,47 +85,86 @@ static public class AssignmentPart1
             Debug.Log("PC class id == " + pc.classID);
 
 
-            //
+            
            
             using (StreamWriter sw = new StreamWriter("A1data.txt"))
             {
                 Debug.Log("Saving data");
-                sw.WriteLine("Health:" + pc.health);
-                sw.WriteLine("Mana: " + pc.mana);
-                sw.WriteLine("Strength " + pc.strength);
-                sw.WriteLine("Agility " + pc.agility);
-                sw.WriteLine("Wisdom " + pc.wisdom);
-                sw.WriteLine("Equipment " + pc.equipment);
+                sw.WriteLine(pc.classID);
+                sw.WriteLine( pc.health);
+                sw.WriteLine( pc.mana);
+                sw.WriteLine( pc.strength);
+                sw.WriteLine( pc.agility);
+                sw.WriteLine( pc.wisdom);
+               // sw.WriteLine("Equipment " + pc.equipment);
 
                 
             }
-            //
+            
         }
 
       
 
     }
-
+    public static int classID;
+    public static int health;
+    public static int mana;
+    public static int strength;
+    public static int agility;
+    public static int wisdom;
     static public void LoadPartyButtonPressed()
     {
 
-       GameContent.partyCharacters.Clear();//
+       GameContent.partyCharacters.Clear();
 
         string line = "";
+      
         using (StreamReader sr = new StreamReader("A1data.txt"))
         {
             while((line = sr.ReadLine())!= null)
             {
                 Debug.Log("Loading data");
-                Console.WriteLine(line);
+                
 
                 PartyCharacter pc = new PartyCharacter();
-               // pc.classID = Convert.ToInt32(line);
+                GameContent.partyCharacters.AddLast(pc);
+
+
+                // Debug.Log(line);
+                // classID = int.Parse(line);
+                Debug.Log("This is my class ID:" + line);
                 pc.classID = int.Parse(line);
 
+                //health = int.Parse(line);
+
+              
+                pc.health = int.Parse(line);
+
+                //mana = int.Parse(line);
+                //Debug.Log(line);
+                pc.mana = int.Parse(line);
+
+                //strength = int.Parse(line);
+                //Debug.Log(line);
+                pc.strength = int.Parse(line);
+
+                //agility = int.Parse(line);
+                //Debug.Log(line);
+                pc.agility = int.Parse(line);
+
+                //wisdom = int.Parse(line);
+                //Debug.Log(line);
+                pc.wisdom = int.Parse(line);
+
+                // pc.AddLast(pc.classID, pc.health, pc.mana, pc.strength, pc.agility, pc.wisdom);
+               
+               // Debug.Log(int.Parse(line));
+
+              
 
             }
-            
+           
+
         }
 
         GameContent.RefreshUI();
