@@ -103,8 +103,6 @@ static public class AssignmentPart1
             
         }
 
-      
-
     }
     public static int classID;
     public static int health;
@@ -118,10 +116,17 @@ static public class AssignmentPart1
        GameContent.partyCharacters.Clear();
 
         string line = "";
-      
+        string lineHealth = "";
+        string lineMana = "";
+        string lineStrength = "";
+        string lineAgility = "";
+        string lineWisdom = "";
+
+
         using (StreamReader sr = new StreamReader("A1data.txt"))
         {
-            while((line = sr.ReadLine())!= null)
+            while((line = sr.ReadLine())!= null && (lineHealth = sr.ReadLine())!=null && (lineMana = sr.ReadLine()) != null
+                && (lineStrength = sr.ReadLine()) != null && (lineAgility = sr.ReadLine()) != null && (lineWisdom = sr.ReadLine()) != null)
             {
                 Debug.Log("Loading data");
                 
@@ -130,38 +135,22 @@ static public class AssignmentPart1
                 GameContent.partyCharacters.AddLast(pc);
 
 
-                // Debug.Log(line);
-                // classID = int.Parse(line);
-                Debug.Log("This is my class ID:" + line);
+                
+                //Debug.Log("This is my class ID:" + line);
                 pc.classID = int.Parse(line);
 
-                //health = int.Parse(line);
+                pc.health = int.Parse(lineHealth);
 
-              
-                pc.health = int.Parse(line);
+                pc.mana = int.Parse(lineMana);
 
-                //mana = int.Parse(line);
-                //Debug.Log(line);
-                pc.mana = int.Parse(line);
+                pc.strength = int.Parse(lineStrength);
 
-                //strength = int.Parse(line);
-                //Debug.Log(line);
-                pc.strength = int.Parse(line);
+                pc.agility = int.Parse(lineAgility);
 
-                //agility = int.Parse(line);
-                //Debug.Log(line);
-                pc.agility = int.Parse(line);
-
-                //wisdom = int.Parse(line);
-                //Debug.Log(line);
-                pc.wisdom = int.Parse(line);
+                pc.wisdom = int.Parse(lineWisdom);
 
                 // pc.AddLast(pc.classID, pc.health, pc.mana, pc.strength, pc.agility, pc.wisdom);
                
-               // Debug.Log(int.Parse(line));
-
-              
-
             }
            
 
