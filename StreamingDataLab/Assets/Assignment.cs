@@ -80,29 +80,24 @@ static public class AssignmentPart1
 
     static public void SavePartyButtonPressed()
     {
-        foreach (PartyCharacter pc in GameContent.partyCharacters)
+
+        using (StreamWriter sw = new StreamWriter("A1data.txt"))
         {
-            Debug.Log("PC class id == " + pc.classID);
-
-
-            
-           
-            using (StreamWriter sw = new StreamWriter("A1data.txt"))
+            foreach (PartyCharacter pc in GameContent.partyCharacters)
             {
                 Debug.Log("Saving data");
                 sw.WriteLine(pc.classID);
-                sw.WriteLine( pc.health);
-                sw.WriteLine( pc.mana);
-                sw.WriteLine( pc.strength);
-                sw.WriteLine( pc.agility);
-                sw.WriteLine( pc.wisdom);
+                sw.WriteLine(pc.health);
+                sw.WriteLine(pc.mana);
+                sw.WriteLine(pc.strength);
+                sw.WriteLine(pc.agility);
+                sw.WriteLine(pc.wisdom);
+            }
+                
                // sw.WriteLine("Equipment " + pc.equipment);
 
                 
-            }
-            
         }
-
     }
     public static int classID;
     public static int health;
