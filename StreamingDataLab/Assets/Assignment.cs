@@ -92,9 +92,17 @@ static public class AssignmentPart1
                 sw.WriteLine(pc.strength);
                 sw.WriteLine(pc.agility);
                 sw.WriteLine(pc.wisdom);
+               
+
+                //foreach (int itemsInList in pc.equipment)
+                //{
+                //    sw.WriteLine("Equipment: " + itemsInList);
+                //}
             }
+
+           
                 
-               // sw.WriteLine("Equipment " + pc.equipment);
+               
 
                 
         }
@@ -116,6 +124,7 @@ static public class AssignmentPart1
         string lineStrength = "";
         string lineAgility = "";
         string lineWisdom = "";
+       // string lineEquipment = "";
 
 
         using (StreamReader sr = new StreamReader("A1data.txt"))
@@ -144,8 +153,14 @@ static public class AssignmentPart1
 
                 pc.wisdom = int.Parse(lineWisdom);
 
+              //  pc.equipment.ToString();
+
+                // pc.equipment = int.Parse(lineEquipment);
+
+                
+
                 // pc.AddLast(pc.classID, pc.health, pc.mana, pc.strength, pc.agility, pc.wisdom);
-               
+
             }
            
 
