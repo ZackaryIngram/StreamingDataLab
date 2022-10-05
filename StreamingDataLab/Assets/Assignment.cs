@@ -184,7 +184,7 @@ static public class AssignmentPart1
 //  This will enable the needed UI/function calls for your to proceed with your assignment.
 static public class AssignmentConfiguration
 {
-    public const int PartOfAssignmentThatIsInDevelopment = 1;
+    public const int PartOfAssignmentThatIsInDevelopment = 2;
 }
 
 /*
@@ -222,31 +222,56 @@ Good luck, journey well.
 
 static public class AssignmentPart2
 {
+    
 
     static public void GameStart()
     {
-
+        GameContent.GetPartyNameFromInput();
         GameContent.RefreshUI();
 
     }
 
     static public List<string> GetListOfPartyNames()
     {
+       
+
         return new List<string>() {
             "sample 1",
             "sample 2",
             "sample 3"
         };
+       
 
     }
 
+   
+
     static public void LoadPartyDropDownChanged(string selectedName)
     {
+        // selectedName = .ReadLine()
+       
+
         GameContent.RefreshUI();
     }
 
     static public void SavePartyButtonPressed()
     {
+        using (StreamWriter sw = new StreamWriter("DataStreamingPt2.txt"))
+        {
+                      
+            foreach (PartyCharacter pc in GameContent.partyCharacters)
+            {
+                Debug.Log("Saving data");
+                sw.WriteLine(pc.classID);
+                sw.WriteLine(pc.health);
+                sw.WriteLine(pc.mana);
+                sw.WriteLine(pc.strength);
+                sw.WriteLine(pc.agility);
+                sw.WriteLine(pc.wisdom);
+    
+            }
+
+        }
         GameContent.RefreshUI();
     }
 
