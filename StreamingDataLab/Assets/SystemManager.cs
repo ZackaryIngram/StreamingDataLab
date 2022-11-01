@@ -68,7 +68,7 @@ public class SystemManager : MonoBehaviour
         loadPartyDropDown.GetComponent<Dropdown>().onValueChanged.AddListener(delegate { LoadDropDownChanged(); });
 
         saveButton2.GetComponent<Button>().onClick.AddListener(SaveButton2Pressed);
-        newButton.GetComponent<Button>().onClick.AddListener(NewButtonPressed);
+       // newButton.GetComponent<Button>().onClick.AddListener(NewButtonPressed);
         deleteButton.GetComponent<Button>().onClick.AddListener(DeleteButtonPressed);
 
         GameContent.SetSystemManager(gameObject);
@@ -207,10 +207,10 @@ public class SystemManager : MonoBehaviour
         AssignmentPart2.SavePartyButtonPressed();
     }
 
-    public void NewButtonPressed()
-    {
-        AssignmentPart2.NewPartyButtonPressed();
-    }
+    //public void NewButtonPressed()
+    //{
+    //    //AssignmentPart2.NewPartyButtonPressed();
+    //}
 
     public void DeleteButtonPressed()
     {
