@@ -124,18 +124,14 @@ static public class AssignmentPart1
 
         using (StreamReader sr = new StreamReader("A1data.txt"))
         {
-            while((line = sr.ReadLine())!= null && (lineHealth = sr.ReadLine())!=null && (lineMana = sr.ReadLine()) != null
-                && (lineStrength = sr.ReadLine()) != null && (lineAgility = sr.ReadLine()) != null && (lineWisdom = sr.ReadLine()) != null)
+            while ((line = sr.ReadLine()) != null && (lineHealth = sr.ReadLine()) != null && (lineMana = sr.ReadLine()) != null
+                && (lineStrength = sr.ReadLine()) != null && (lineAgility = sr.ReadLine()) != null && (lineWisdom = sr.ReadLine()) != null)             
             {
                 Debug.Log("Loading data");
                 
-
                 PartyCharacter pc = new PartyCharacter();
                 GameContent.partyCharacters.AddLast(pc);
 
-
-                
-                //Debug.Log("This is my class ID:" + line);
                 pc.classID = int.Parse(line);
 
                 pc.health = int.Parse(lineHealth);
@@ -148,17 +144,12 @@ static public class AssignmentPart1
 
                 pc.wisdom = int.Parse(lineWisdom);
 
-                //  pc.equipment.ToString();
+              //  pc.equipment.ToString();
 
-                // pc.equipment = int.Parse(lineEquipment);
-          
-
-
-                // pc.AddLast(pc.classID, pc.health, pc.mana, pc.strength, pc.agility, pc.wisdom);
+             // pc.equipment = int.Parse(lineEquipment);        
 
             }
            
-
         }
 
         GameContent.RefreshUI();
@@ -217,14 +208,21 @@ Good luck, journey well.
 
 static public class AssignmentPart2
 {
+    //Party text file
     public static string partyFile = "party.txt";
+
+    //Linked List of party data
     private static LinkedList<CharacterData> parties;
+
+    //Index for the character that is saved/loaded
     private static uint lastIndex = 0;
+
+    //An empty string variable that is used for the users input
     private static string lastName = "";
 
-    //Trying to use signifiers, getting used to them still
-    public const int CharacterSaveSignifier = 0;
-    public const int EquopmentSaveSignifier = 1;
+    //Signifiers
+    public const int CharacterStatsSignifier = 0;
+    public const int CharacterEquipmentSignifier = 1;
 
     static public void GameStart()
     {
@@ -235,6 +233,7 @@ static public class AssignmentPart2
 
     static public List<string> GetListOfPartyNames()
     {
+        //If "Parties" linked list is empty, create a list of strings
         if (parties == null)
         {
             return new List<string>();
@@ -242,7 +241,7 @@ static public class AssignmentPart2
 
         List<string> partyNames = new List<string>();
 
-        //Loop through each party and add a name
+        //For each character, add name to the linked list "parties"
         foreach (CharacterData partyData in parties)
         {
             partyNames.Add(partyData.name);
@@ -255,7 +254,7 @@ static public class AssignmentPart2
     {
         lastName = selectedName;
 
-        //Loop through each party and check if the selected name is the party name, if so load the party
+        //For each character in the linked list, check if the selected name matches any name created, if so, load it up.
         foreach (CharacterData partyData in parties)
         {
             if (selectedName == partyData.name)
@@ -268,14 +267,19 @@ static public class AssignmentPart2
     }
 
     static public void SavePartyButtonPressed()
-    {
-       //Saving parties
-
+    {      
+        //Add to index
         lastIndex++;
+
+        //Create new character data with the characters index and name
         CharacterData party = new CharacterData(lastIndex, GameContent.GetPartyNameFromInput());
+
+        //Add the party that is saved to the linked list "parties"
         parties.AddLast(party);
 
+        //Save party data using SW to a file
         SavePartyData();
+
         party.Saving();
 
         GameContent.RefreshUI();
@@ -283,69 +287,69 @@ static public class AssignmentPart2
 
     static public void DeletePartyButtonPressed()
     {
-        var node = parties.First;
+        var partyToBeDeleted = parties.First;
         
-        //loop through party nodes
-        while (node != null)
+        //While there is a party to be deleted
+        while (partyToBeDeleted != null)
         {      
-            var next = node.Next;
+            var next = partyToBeDeleted.Next;
 
-            //If node is the last name, then delete file and remove party nodes.
-            if (node.Value.name == lastName)
+            //If the party that the user wants to deleted has a name that matches the name selected, then delete the file and remove the party from the linked list
+            if (partyToBeDeleted.Value.name == lastName)
             {
-                string path = Application.dataPath + Path.DirectorySeparatorChar + node.Value.index + ".txt";
+                string path = partyToBeDeleted.Value.index + ".txt";
                 if (File.Exists(path))
                 {
                     File.Delete(path);
-                }
-
-                parties.Remove(node);
+                }  
+                
+                parties.Remove(partyToBeDeleted);
                 break;
             }
-            node = next;
+            partyToBeDeleted = next;
         }
 
         SavePartyData();
         GameContent.RefreshUI();
     }
 
+    //Function that uses StreamWriter to save each parties index and name. 
     static public void SavePartyData()
     {
-        StreamWriter sw = new StreamWriter(Application.dataPath + Path.DirectorySeparatorChar + partyFile);
-        sw.WriteLine("1," + lastIndex);
+        StreamWriter sw = new StreamWriter(partyFile);
+        sw.WriteLine(lastIndex);
 
         //Loop through parties and save index and names
         foreach (CharacterData partyData in parties)
         {
-            sw.WriteLine("2," + partyData.index + "," + partyData.name);
+            sw.WriteLine(partyData.index + "," + partyData.name);
         }
         sw.Close();
     }
 
-    //static public void NewPartyButtonPressed()
-    //{
-
-    //}
-
     static public void LoadPartyData()
     {
         parties = new LinkedList<CharacterData>();
-        string path = Application.dataPath + Path.DirectorySeparatorChar + partyFile;
-        //Check if file exists. Using data signifiers, either parse the last index OR Add the last party 
+        string path = partyFile;
+
+        //Check if file exists     
         if (File.Exists(path))
         {
             StreamReader sr = new StreamReader(path);
             string line = "";
+            
             while ((line = sr.ReadLine()) != null)
-            {
+            {               
                 string[] csv = line.Split(',');
 
-                int dataSignifier = int.Parse(csv[0]);
-                if (dataSignifier == 1)
+                int signifier = int.Parse(csv[0]);
+
+               //Depending on the signifier value, parse the index or add a new node with the parsed characted data to the linked list
+                if (signifier == 1)
                 {
                     lastIndex = uint.Parse(csv[1]);
                 }
-                else if (dataSignifier == 2)
+                else if (signifier == 2)
                 {
                     parties.AddLast(new CharacterData(uint.Parse(csv[1]), csv[2]));
                 }
@@ -355,9 +359,9 @@ static public class AssignmentPart2
     }
 }
 
+//Class that contains important data for saving and loading character parties.
 class CharacterData
 {
-
     public uint index;
     public string name;
 
@@ -367,22 +371,23 @@ class CharacterData
         this.name = name;
     }
 
+    //Saving each character trait to text file
     public void Saving()
     {  
         StreamWriter sw = new StreamWriter("A2Data.txt");
       
         foreach (PartyCharacter pc in GameContent.partyCharacters)
         {
-            sw.WriteLine(AssignmentPart2.CharacterSaveSignifier + pc.classID);
-            sw.WriteLine(AssignmentPart2.CharacterSaveSignifier + pc.health);
-            sw.WriteLine(AssignmentPart2.CharacterSaveSignifier + pc.mana);
-            sw.WriteLine(AssignmentPart2.CharacterSaveSignifier + pc.strength);
-            sw.WriteLine(AssignmentPart2.CharacterSaveSignifier + pc.agility);
-            sw.WriteLine(AssignmentPart2.CharacterSaveSignifier + pc.wisdom);
+            sw.WriteLine(AssignmentPart2.CharacterStatsSignifier + pc.classID);//1 
+            sw.WriteLine(AssignmentPart2.CharacterStatsSignifier + pc.health);//2
+            sw.WriteLine(AssignmentPart2.CharacterStatsSignifier + pc.mana);//3
+            sw.WriteLine(AssignmentPart2.CharacterStatsSignifier + pc.strength);//4
+            sw.WriteLine(AssignmentPart2.CharacterStatsSignifier + pc.agility);//5
+            sw.WriteLine(AssignmentPart2.CharacterStatsSignifier + pc.wisdom);//6
 
             foreach (int equipID in pc.equipment)
             {
-                sw.WriteLine(AssignmentPart2.EquopmentSaveSignifier + equipID);
+                sw.WriteLine(AssignmentPart2.CharacterEquipmentSignifier + equipID);
             }
 
         }
@@ -390,10 +395,12 @@ class CharacterData
         sw.Close();      
     }
 
+    //Loading each trait when needed
     public void Loading()
     {
-        string path = Application.dataPath + Path.DirectorySeparatorChar + index + ".txt";
+        string path = index + ".txt";
 
+        //Make sure file exists
         if (File.Exists(path))
         {
             GameContent.partyCharacters.Clear();
@@ -401,31 +408,19 @@ class CharacterData
             StreamReader sr = new StreamReader(path);
 
             while ((line = sr.ReadLine()) != null)
-            {
+            {             
                 string[] csv = line.Split(',');
 
-                int saveDataSignifier = int.Parse(csv[0]);
-                if (saveDataSignifier == AssignmentPart2.CharacterSaveSignifier)
+                //Parse the signifier
+                int loadSignifier = int.Parse(csv[0]);
+             
+                if (loadSignifier == AssignmentPart2.CharacterStatsSignifier)
                 {
-                    /* 
-                        * 1 : classID 
-                        * 2: Health
-                        * 3: Mana
-                        * 4: Strength
-                        * 5: Agility
-                        * 6: Wisdom
-                       */
-                    PartyCharacter newChar = new PartyCharacter(
-                        int.Parse(csv[1]), 
-                        int.Parse(csv[2]), 
-                        int.Parse(csv[3]), 
-                        int.Parse(csv[4]), 
-                        int.Parse(csv[5]), 
-                        int.Parse(csv[6])  
-                        );
-                    GameContent.partyCharacters.AddLast(newChar);
+                    //Character csv 1: classID csv 2: Health csv 3: Mana csv 4: Strength csv 5 : Agility csv 6: Wisdom     
+                    PartyCharacter character = new PartyCharacter(int.Parse(csv[1]), int.Parse(csv[2]), int.Parse(csv[3]),int.Parse(csv[4]),int.Parse(csv[5]),int.Parse(csv[6]));
+                    GameContent.partyCharacters.AddLast(character);
                 }
-                if (saveDataSignifier == AssignmentPart2.EquopmentSaveSignifier)
+                if (loadSignifier == AssignmentPart2.CharacterEquipmentSignifier)
                 {
                     GameContent.partyCharacters.Last.Value.equipment.AddLast(int.Parse(csv[1]));
                 }
